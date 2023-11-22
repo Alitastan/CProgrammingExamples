@@ -14,6 +14,10 @@ int main (void)
     long long ll;
     long double ld;
 
+    double variable[5];
+
+    printf("Len of double variable array: %zu\n", sizeof(variable) / sizeof(variable[0]));
+
     printf("Size of char: %zu\n", sizeof(c));
     printf("Size of short: %zu\n", sizeof(s));
     printf("Size of int: %zu\n", sizeof(i));
