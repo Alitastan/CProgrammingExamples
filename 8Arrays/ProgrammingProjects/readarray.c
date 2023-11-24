@@ -10,13 +10,13 @@ int main (void)
 {
     // Declare 5 x 5 array of integers
     int userArray[ROW_LEN][COLUMN_LEN], rowSum[ROW_LEN] = {0}, columnSum[COLUMN_LEN] = {0};
-    int row, column, rowNumber = 0; ;
+    int row, column;
 
 
     // Get each row
     for (row = 0; row < ROW_LEN; row++)
     {    
-        printf("Enter row %d: ", ++rowNumber);
+        printf("Enter row %d: ", row + 1);
 
         for (column = 0; column < COLUMN_LEN; column++)
         {
