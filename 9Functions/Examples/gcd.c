@@ -3,10 +3,12 @@
 #include <stdio.h>
 
 int gcd (int m, int n);
+int gcdRecursive (int m, int n);
 
 int main (void)
 {
-    printf ("Greatest common divisor: %d\n", gcd (40, 16));
+    printf ("Greatest common divisor: %d\n", gcd (100, 16));
+    printf ("Recursively: %d\n", gcdRecursive(100, 16));
 
     return 0;
 }
@@ -23,4 +25,9 @@ int gcd (int m, int n)
     }
 
     return m;
+}
+
+int gcdRecursive (int m, int n)
+{
+    return n == 0 ? m : gcdRecursive(n, m % n);
 }
