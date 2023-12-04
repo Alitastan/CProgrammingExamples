@@ -29,19 +29,21 @@ int main (void)
     // we run it. Srand initializes C's random number generator.
     srand((unsigned) time(NULL));
 
+    char command;
 
-    bool play = playGame();
-    lastPoint = point;
 
-    printf("Your point %d\n", lastPoint);
 
-    for(;;)
-    {
+    do{
+
+        bool play = playGame();
+        lastPoint = point;
+
+        printf("Your point %d\n", lastPoint);
 
         if (play)
         {
             printf("You won!\n");
-            break;
+
         }
         else
         {
@@ -61,11 +63,15 @@ int main (void)
                 
             }
 
-            break;
 
         }
 
-    }
+        printf("Want to play again? (Y/N): ");
+        scanf(" %c", &command);
+    }while (command == 'y' || command == 'Y');
+        
+
+    printf("\nExiting the program!\n");
 
     return 0;
 
