@@ -7,12 +7,12 @@
 #define NUM_CARDS   5
 #define RANK    0
 #define SUIT    1
-
+#define RANK_OF_ACE 12
 
 /*  External variables  */
 int hand[NUM_CARDS][2];
 
-bool straight, flush, four, three;
+bool royalFlush, straight, flush, four, three;
 int pairs;  /* Can be 0, 1 or 2 */
 
 /*  Prototypes  */
@@ -79,10 +79,10 @@ void readCards (void)
         suitCh = getchar();
         switch (suitCh)
         {
-            case 'c': case 'C': suit = 0; break;
-            case 'd': case 'D': suit = 1; break;
-            case 'h': case 'H': suit = 2; break;
-            case 's': case 'S': suit = 3; break;
+            case 'c': case 'C': suit = 0; break; // Sinek - clubs
+            case 'd': case 'D': suit = 1; break; // Karo - diamonds
+            case 'h': case 'H': suit = 2; break; // Kupa - hearts
+            case 's': case 'S': suit = 3; break; // Maça - spades
             default:            badCard = true;
         }
 
@@ -125,8 +125,9 @@ void analyzeHand (void)
 {
 
     int rank, suit, card, pass, run;
-    straight = false;
-    flush = false;
+    royalFlush = false;
+    straight = true;
+    flush = true;
     four = false;
     three = false;
     pairs = 0;
@@ -146,6 +147,25 @@ void analyzeHand (void)
                 hand[card + 1][SUIT] = suit;
             }
         }
+
+
+    /* Check for royal flush (Ace, King, Queen, Jack, Ten of the same suit) */
+    suit = hand[0][SUIT];
+    rank = hand[0][RANK];
+    for (card = 1; card < NUM_CARDS; card++)
+    {
+        if (hand[card][SUIT] == suit 
+            && hand[card][RANK] == rank + 1)
+            {
+                rank = hand[card][RANK];
+                if (rank == RANK_OF_ACE)
+                {
+                    royalFlush = true;
+                    break;
+                }
+                   
+            }
+    }
 
     /*  Check for flush */
     suit = hand[0][SUIT];
@@ -189,16 +209,17 @@ void analyzeHand (void)
 */
 void printResult (void)
 {  
-    if (straight && flush)  printf("Straight flush");
-    else if (four)          printf("Four of a kind");
+    if (royalFlush)                 printf("Royal flush");
+    else if (straight && flush)     printf("Straight flush");
+    else if (four)                  printf("Four of a kind");
     else if (three &&
-            pairs == 1)     printf("Full house");
-    else if (flush)         printf("Flush");
-    else if (straight)      printf("Straight");
-    else if (three)         printf("Three of a kind");
-    else if (pairs == 2)    printf("Two pairs");
-    else if (pairs == 1)    printf("Pair");
-    else                    printf("High card");
+            pairs == 1)             printf("Full house");
+    else if (flush)                 printf("Flush");
+    else if (straight)              printf("Straight");
+    else if (three)                 printf("Three of a kind");
+    else if (pairs == 2)            printf("Two pairs");
+    else if (pairs == 1)            printf("Pair");
+    else                            printf("High card");
 
     printf("\n\n");
 }

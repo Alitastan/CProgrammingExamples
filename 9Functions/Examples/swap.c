@@ -10,6 +10,8 @@ int main (void)
 
     printf("i = %d, j = %d\n", i, j);
 
+    printf(" 40 / - 8: %d\n", -8 / 40 );
+
     return 0;
 }
 
