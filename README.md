@@ -1,4 +1,4 @@
-# CProgrammingExamples
+# C Programming Projects & Examples
 This repository contains examples and programming projects from the [C Programming - A Modern Approach / K. N. KING](http://knking.com/books/c2/cover.html)
 
 
