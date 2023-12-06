@@ -2,12 +2,6 @@
 This repository contains examples and programming projects from the [C Programming - A Modern Approach / K. N. KING](http://knking.com/books/c2/cover.html)
 
 
-## Notes
-
-There are few examples and programming projects which has solutions on the book whereas most of them do not have any solution. You can find my solutions for each section. I hope you enjoy!
-
-
-
 ### Some of my favorite programs:
 - [sevensegment.c](https://github.com/Alitastan/CProgrammingExamples/blob/main/10ProgramOrganization/ProgrammingProjects/sevensegment.c) 
  *that displays the input digits with a simulated seven-segment effect.*
@@ -20,3 +14,7 @@ There are few examples and programming projects which has solutions on the book 
 
 
 
+
+## Notes
+
+There are few examples and programming projects which has solutions on the book whereas most of them do not have any solution. You can find my solutions for each section. I hope you enjoy!
