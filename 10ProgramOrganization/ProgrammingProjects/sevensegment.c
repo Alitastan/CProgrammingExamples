@@ -9,11 +9,21 @@
 
 #include <stdio.h>
 #include <ctype.h>
+#include <stdbool.h>
 
-#define MAX_DIGITS  10
-#define ROW_LENGTH  4
+#define MAX_DIGITS          10
+#define ROW_LENGTH          4
 #define COLUMN_LENGTH   (MAX_DIGITS * ROW_LENGTH)
-#define SEGMENT_LENGTH  7
+#define SEGMENT_LENGTH      7
+#define DIGIT_WIDTH         3
+#define DIGIT_HEIGHT        4
+#define POS1    0
+#define POS2    1
+#define POS3    2
+#define POS4    3
+#define POS5    4
+#define POS6    5
+#define POS7    6
 
 // External variables
 
@@ -58,20 +68,36 @@ int main (void)
 
     while ((userInput = getchar()) != '\n')
     {
-        // convert user input to integer number
+ 
+        // Convert user input to integer number
         if (isdigit(userInput))
-            number = userInput - '0'; 
+        {
+            number = userInput - '0';
+
+            if (position < MAX_DIGITS)
+            {   
+                processDigit(number, position);
+            }
+            else
+            {
+                printf("Out of boundry!\n");
+                break;
+            }
+
+        }
+
+        // Characters other than digits should be ignored.
+        else
+        {
+            continue;
+        } 
         
-        if (position < MAX_DIGITS - 1)
-            processDigit(number, position);
-        else break;
-            
         position++;
 
     }
     
-
     printDigitsArray();
+
 
     return 0;
 }
@@ -97,29 +123,103 @@ void clearDigitsArray (void)
 */
 void processDigit (int digit, int position)
 {
-    int row, column;
-    int sevenSegmentRepresentaton[SEGMENT_LENGTH];
-    
-    row = digit;
+    bool digitHighOrLow[SEGMENT_LENGTH];
 
+    int row, column, segmentColumn;
 
-    for (column = 0; column < SEGMENT_LENGTH; column++)
-    {   
-        // Example output: {0, 1, 1, 0, 0, 1, 1}
-        sevenSegmentRepresentaton[column] = segments[row][column];
+    // For digit 4:     0, 1, 1, 0, 0, 1, 1
 
-        switch (sevenSegmentRepresentaton[column])
+    for (segmentColumn = 0; segmentColumn < SEGMENT_LENGTH; segmentColumn++)
+    {
+        digitHighOrLow[segmentColumn] = (segments[digit][segmentColumn] == true) ? true: false;
+
+        switch (segmentColumn)
         {
-            case 0: case 3: case 6: printf("-"); break;
-            case 1: case 2: case 4: case 5: printf("|"); break;
+            case POS1:
+                // row = 0, column = 0, 1, 2,  next column will be 4, 5, 6,  next column will be 8, 9, 10  etc..
+                row = 0;
+                column = (position * DIGIT_WIDTH) + DIGIT_WIDTH + position;
+                
+                if (digitHighOrLow[POS1])
+                {
+                    for (int newColumn = column - DIGIT_WIDTH + 1; newColumn < column - 1; newColumn++)
+                            digits[row][newColumn] = '_';   
+                }               
+                break;
+            
+            case POS2:
+                // column = 2, row = 0, 1.  next column will be 6 then 10, 14 etc..
+                column = (DIGIT_WIDTH - 1) + (DIGIT_HEIGHT * position);
 
-            default: break;
+                if (digitHighOrLow[POS2])
+                {
+                    for (int newRow = 1; newRow < DIGIT_HEIGHT / 2; newRow++)
+                            digits[newRow][column] = '|';
+                }
+                break;
+ 
+            
+            case POS3:
+                // column = 2, row = 2, 3.  next column will be 6 then 10, 14 etc..
+                column = (DIGIT_WIDTH - 1) + (DIGIT_HEIGHT * position);
+
+                if (digitHighOrLow[POS3])
+                {
+                    for (int newRow = 2; newRow < DIGIT_HEIGHT; newRow++)
+                            digits[newRow][column] = '|';
+                }
+                break;
+
+            case POS4:
+                // row = 3, column = 0, 1, 2,  next column will be 4, 5, 6,  next column will be 8, 9, 10  etc..
+                row = DIGIT_WIDTH;
+                column = (position * DIGIT_WIDTH) + DIGIT_WIDTH + position;
+                
+                if (digitHighOrLow[POS4])
+                {
+                    for (int newColumn = column - DIGIT_WIDTH; newColumn < column - 1; newColumn++)
+                            digits[row][newColumn] = '_';
+                }               
+                break;
+                
+            case POS5:
+                // column = 0, row = 2, 3.  next column will be 4 then 8, 12 etc..
+                column = (DIGIT_HEIGHT * position);
+
+                if (digitHighOrLow[POS5])
+                {
+                    for (int newRow = 2; newRow < DIGIT_HEIGHT; newRow++)
+                            digits[newRow][column] = '|';
+                }
+                break;
+                
+            case POS6:
+                // column = 0, row = 0, 1.  next column will be 4 then 8, 12 etc..
+                column = (DIGIT_HEIGHT * position);
+
+                if (digitHighOrLow[POS6])
+                {
+                    for (int newRow = 1; newRow < DIGIT_HEIGHT / 2; newRow++)
+                            digits[newRow][column] = '|';
+                }
+                break;
+
+            case POS7:
+                // row = 1
+                row = DIGIT_HEIGHT / 2;
+                column = (position * DIGIT_WIDTH) + DIGIT_WIDTH + position;
+                
+                if (digitHighOrLow[POS7])
+                {
+                    for (int newColumn = column - DIGIT_WIDTH + 1; newColumn < column - 1; newColumn++)
+                            digits[row][newColumn] = '-';
+                }               
+                break;
+  
         }
 
-        
     }
-    
-
+ 
 
 }
 
