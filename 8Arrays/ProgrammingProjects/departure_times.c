@@ -18,6 +18,7 @@
 
 int main (void)
 {
+    /* Departure and arrival times in minutes since midnight */
     int departureTimes[DEPARTURE] = {8 * 60, 9 * 60 + 43, 11 * 60 + 19,
                                     12 * 60 + 47, 14 * 60, 15 * 60 + 45,
                                     19 * 60, 21 * 60 + 45};
