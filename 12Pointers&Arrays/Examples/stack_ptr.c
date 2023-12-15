@@ -67,6 +67,7 @@ void makeEmpty (void)
     for (top_ptr = stack_contents; top_ptr < stack_contents + STACK_SIZE; top_ptr++)
         *top_ptr = 0;
     //top = 0;
+    // top_ptr = &stack_contents[0];
 }
 
 bool isEmpty (void)
