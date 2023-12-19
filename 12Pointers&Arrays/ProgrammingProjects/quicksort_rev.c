@@ -2,25 +2,34 @@
 
 #include <stdio.h>
 
-#define N   20
+#define N   7
 
-void quicksort (int a[], int low, int high);
-int split (int a[], int low, int high);
+void quicksort (int *array, int *low, int *high);
+int *split (int *array, int *low, int *high);
 
 int main (void)
 {
-    int a[N], i;
+    int a[N], *p_array, *low, *high;
+
+
 
     printf ("Enter %d numbers to be sorted: ", N);
 
-    for (i = 0; i < N; i++)
-        scanf("%d", &a[i]);
+    for (p_array = a; p_array < a + N; p_array++)
+        scanf("%d", p_array);
 
-    quicksort(a, 0, N - 1);
+
+
+
+
+    low = a;                //low = &a[0];
+    high = a + N - 1;       //high = &a[N-1];
+
+    quicksort(a, low, high);
 
     printf("In sorted order: ");
-    for (i = 0; i < N; i++)
-        printf("%d ", a[i]);
+    for (p_array = a; p_array < a + N; p_array++)
+        printf(" %d", *p_array);
     
     printf("\n");
 
@@ -31,33 +40,33 @@ int main (void)
 
 
 // Uses recursion
-void quicksort (int a[], int low, int high)
+void quicksort (int *array, int *low, int *high)
 {
-    int middle;
+    int *middle;
 
     if (low >= high) return;
-    middle = split(a, low, high);
-    quicksort(a, low, middle - 1);
-    quicksort(a, middle + 1, high);
+
+    middle = split (array, low, high);
+    quicksort (array, low, middle - 1);
+    quicksort (array, middle + 1, high);
 }
 
-
-int split (int a[], int low, int high)
+int *split (int *array, int *low, int *high)
 {
-    int partElement = a[low];
+    int part_element = *low;
 
-    for(;;)
+    for (;;)
     {
-        while (low < high && partElement <= a[high])
+        while (low < high && part_element <= *high)
             high--;
         if (low >= high) break;
-        a[low++] = a[high];
+        *low++ = *high;
 
-        while (low < high && a[low] <= partElement)
+        while (low < high && *low <= part_element)
             low++;
         if (low >= high) break;
-        a[high--] = a[low];
+        *high-- = *low;
     }
-    a[high] = partElement;
+    *high = part_element;
     return high;
 }
