@@ -15,6 +15,7 @@
 int count_spaces (const char s[]);
 int count_spaces_2 (const char *s);
 int count_spaces_3 (const char *s);
+int count_spaces_4 (const char *s);
 
 
 int main (void)
@@ -23,7 +24,7 @@ int main (void)
     char str[] = "We are going to have fun!";
     int space_count = 0;
 
-    space_count = count_spaces_3(str);
+    space_count = count_spaces_4(str);
     printf("Space Count: %d\n", space_count);
 
     return 0;
@@ -65,6 +66,19 @@ int count_spaces_3 (const char *s)
     }
 
     return count;
+}
+
+int count_spaces_4 (const char *s)
+{
+    int count = 0;
+
+    while (*s)
+        if (*s++ == ' ')
+            count++;
+    
+    return count;
+
+    
 }
 
 
