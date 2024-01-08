@@ -21,7 +21,7 @@ int main (void)
     putchar(lastName);
 
     // Get the rest of the last name
-    while ((lastName = getchar()) != ' ')
+    while ((lastName = getchar()) != '\n')
         putchar(lastName);
 
 
@@ -32,7 +32,7 @@ int main (void)
 
     printf(".");
 
-    while ((lastName = getchar()) != '\n');
+
     
         
     return 0;

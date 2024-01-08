@@ -45,7 +45,7 @@ void read_line (char *str, int n)
 
     while ((ch = getchar()) != '\n')
         if (i < n)
-            *str++ = ch;
+            str[i++] = ch;
         
-    *str = '\0';
+    str[i] = '\0';
 }
