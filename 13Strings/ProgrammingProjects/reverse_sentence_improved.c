@@ -26,55 +26,97 @@
 
 #include <stdio.h>
 #include <ctype.h>
+#include <string.h>
 
-#define SENTENCE_LEN    3
-#define MAX_WORD_LEN    (SENTENCE_LEN * 20) 
+#define SENTENCE_LEN    30
+#define MAX_WORD_LEN    20
+#define FINAL_STRING_LEN    (SENTENCE_LEN * MAX_WORD_LEN)
+#define APOSTROPHE      39
 
 
-int read_line_no_punc (char str[], int n);
+int read_line_no_punc (char str[], char *punctuation, int n);
 
 int main (void)
 {
   
     char words_array[SENTENCE_LEN][MAX_WORD_LEN + 1];
-    int word_len = 0, i;
+    char final_string[FINAL_STRING_LEN + 1], final_punct_string[2];
     char final_punctuation;
+    int word_count = 0, i;
 
+    printf("Enter a sentence: ");
+    
 
-    for(;;)
+    while (word_count < SENTENCE_LEN)
     {
-        printf("Enter a sentence: ");
+        int word_len = 0;
 
-        if (word_len == SENTENCE_LEN)
+        word_len = read_line_no_punc(words_array[word_count], &final_punctuation, MAX_WORD_LEN);
+
+        if (word_len < MAX_WORD_LEN)
+            word_count++;
+
+        else if (word_len == MAX_WORD_LEN)
         {
-            printf("-- No space left to store -- \n");
-            break;
+            printf("Too much words entered! Please enter again: ");
+            continue;
         }
+        else{}
 
-        read_line_no_punc(words_array[word_len], MAX_WORD_LEN );
+        // Check for punctuation and exit the loop only if the word count is reached
+        if (ispunct(final_punctuation))
+            break;
 
-        word_len++;
     }
 
 
-    printf("\nWords Entered\n");
-    for (i = 0; i < word_len; i++)
-        printf("%s\n", words_array[i]);
+
+
+    sprintf(final_punct_string, "%c", final_punctuation);
+
+    printf("\nWords in Reverse\n");
+    for (i = word_count; i >= 0; i--)
+    {
+        strcat(final_string, words_array[i]);
+        if (i != word_count && i != 0)
+            strcat(final_string, " ");
+    }
+
+    strcat(final_string, final_punct_string);
+    puts(final_string);
     
 
     return 0;
 }
 
-int read_line_no_punc (char str[], int n)
+int read_line_no_punc (char str[], char *punctuation, int n)
 {
     int ch, i = 0;
-
+    
     while (!isspace(ch = getchar()))
+    {
         if (i < n)
+        {
+            // We want to store words such as can't isn't but not in the first letter
+            if (ch == APOSTROPHE && i > 0)
+            {
+                str[i++] = ch;
+                continue;
+            }
+            // Save only non punctuations
             if (!ispunct(ch))
                 str[i++] = ch;
-            else continue;
+            else
+            {
+                // Save the final punctuation
+                *punctuation = ch;
+                
+            } 
+        }
+    }
+
 
     str[i] = '\0';
     return i;
 }
+
