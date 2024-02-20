@@ -2,6 +2,11 @@
     "files.associations": {
         "stdio.h": "c",
         "stdint.h": "c",
-        "ctype.h": "c"
+        "ctype.h": "c",
+        "debug.h": "c",
+        "f1.h": "c",
+        "f2.h": "c",
+        "word.h": "c",
+        "readline.h": "c"
     }
 }
