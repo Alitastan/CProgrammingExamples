@@ -41,5 +41,9 @@ int main (void)
     student2.name = new_name;
 
     display_name(student2);
+
+    display_name((struct student) {.name.first = "Compound",
+    .name.last = "Literal",
+    .name.middle_initial = 'N'}); 
 }
 
