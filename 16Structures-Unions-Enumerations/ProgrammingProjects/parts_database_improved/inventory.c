@@ -7,11 +7,14 @@
 
 #define NAME_LEN    25
 #define MAX_PARTS   100
+#define UPDATE_PRICE    1
+#define UPDATE_QUANTITY 2
 
 struct part {
     int number;
     char name[NAME_LEN + 1];
     int on_hand;
+    float price;
 };
 
 
@@ -101,6 +104,10 @@ void insert(struct part inventory[], int *num_parts)
     inventory[*num_parts].number = part_number;
     printf("Enter part name: ");
     read_line(inventory[*num_parts].name, NAME_LEN);
+
+    printf("Enter item price: ");
+    scanf("%f", &inventory[*num_parts].price);
+
     printf("Enter quantity on hand: ");
     scanf("%d", &inventory[*num_parts].on_hand);
     (*num_parts)++;
@@ -123,6 +130,7 @@ void search(const struct part inventory[], int num_parts)
     if (i >= 0)
     {
         printf("Part name: %s\n", inventory[i].name);
+        printf("Part price: %f\n", inventory[i].price);
         printf("Quantity on hand: %d\n", inventory[i].on_hand);
     }
     else
@@ -139,7 +147,8 @@ void search(const struct part inventory[], int num_parts)
 */
 void update(struct part inventory[], int num_parts)
 {
-    int i, number, change;
+    int i, number, change, command;
+    float new_price = 0.0f;
     
     printf("Enter part number: ");
     scanf("%d", &number);
@@ -147,9 +156,23 @@ void update(struct part inventory[], int num_parts)
 
     if (i >= 0)
     {
-        printf("Enter change in quantity on hand: ");
-        scanf("%d", &change);
-        inventory[i].on_hand += change;
+        printf("Enter to update [1(PRICE), 2(QUANTITY)]: ");
+        scanf("%d",&command);
+        switch (command)
+        {
+            case UPDATE_PRICE:
+                printf("Enter the new price: ");
+                scanf("%f", &new_price);
+                inventory[i].price = new_price;
+                break;
+
+            case UPDATE_QUANTITY: 
+                printf("Enter change in quantity on hand: ");
+                scanf("%d", &change);
+                inventory[i].on_hand += change;
+                break;
+        }
+
     }
     else
     {
@@ -167,15 +190,18 @@ void print(struct part inventory[], int num_parts)
 {
     int i;
 
-    printf("Part Number  Part Name     "          
+    printf("Part Number  Part Name  Part Price     "          
     "Quantity on Hand\n");
 
     
     sort_inventory(inventory, num_parts);
 
     for (i = 0; i < num_parts; i++)
-        printf("%7d     %-25s%lld\n", inventory[i].number,
-                    inventory[i].name, inventory[i].on_hand);
+        printf("%7d      %s   %-15.4f  %d\n",
+        inventory[i].number,
+        inventory[i].name,
+        inventory[i].price,
+        inventory[i].on_hand);
     
 }
 
