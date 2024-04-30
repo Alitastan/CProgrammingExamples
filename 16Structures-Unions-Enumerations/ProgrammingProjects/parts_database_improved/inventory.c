@@ -22,29 +22,31 @@ void search(void);
 void update(void);
 void print(void);
 
-void sort_inventory (struct part inventory[])
+// Bubble sort
+void sort_inventory (struct part inventory[], int size)
 {
+    
     int i, j;
 
-    struct part sorted_inventory[] = inventory;
 
-    for (i = 0; i < num_parts; i++)
+    for (i = 0; i < size - 1; i++)
     {
-        if (inventory[i].number > inventory[i + 1].number)
+        for (j = 0; j < size - i - 1; j++)
         {
-            break;
+            if (inventory[j].number > inventory[j + 1].number)
+            {
+
+                struct part temp = inventory[j];
+                inventory[j] = inventory[j + 1];
+                inventory[j + 1] = temp;
+
+            }
+
         }
     }
 
-    for (j = i + 1; j > i; j--)
-    {
-        inventory[j] = inventory[j - 1];
-    }
 
-    /**
-     * Todo
-    */
-
+    
 }
 
 /**
@@ -190,6 +192,9 @@ void print(void)
 
     printf("Part Number  Part Name     "          
     "Quantity on Hand\n");
+
+    
+    sort_inventory(inventory, num_parts);
 
     for (i = 0; i < num_parts; i++)
         printf("%7d     %-25s%lld\n", inventory[i].number,
