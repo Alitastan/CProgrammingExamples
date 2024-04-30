@@ -12,42 +12,17 @@ struct part {
     int number;
     char name[NAME_LEN + 1];
     int on_hand;
-}inventory[MAX_PARTS];
-
-int num_parts = 0; // Number of parts currently stored
-
-int find_part(int number);
-void insert(void);
-void search(void);
-void update(void);
-void print(void);
-
-// Bubble sort
-void sort_inventory (struct part inventory[], int size)
-{
-    
-    int i, j;
+};
 
 
-    for (i = 0; i < size - 1; i++)
-    {
-        for (j = 0; j < size - i - 1; j++)
-        {
-            if (inventory[j].number > inventory[j + 1].number)
-            {
-
-                struct part temp = inventory[j];
-                inventory[j] = inventory[j + 1];
-                inventory[j + 1] = temp;
-
-            }
-
-        }
-    }
+int find_part(int number, const struct part inventory[], int num_parts);
+void insert(struct part inventory[], int *num_parts);
+void search(const struct part inventory[], int num_parts);
+void update(struct part inventory[], int num_parts);
+void print(struct part inventory[], int num_parts);
+void sort_inventory (struct part inventory[], int size);
 
 
-    
-}
 
 /**
  * main: Prompts the user to enter an operation code,
@@ -57,7 +32,9 @@ void sort_inventory (struct part inventory[], int size)
 */
 int main(void)
 {
+    struct part inventory[MAX_PARTS];
     char code;
+    int num_parts = 0; // Number of parts currently stored
 
     for(;;)
     {
@@ -69,10 +46,10 @@ int main(void)
 
         switch (code)
         {
-            case 'i': insert(); break;
-            case 's': search(); break;
-            case 'u': update(); break;
-            case 'p': print(); break;
+            case 'i': insert(inventory, &num_parts); break;
+            case 's': search(inventory, num_parts); break;
+            case 'u': update(inventory, num_parts); break;
+            case 'p': print(inventory, num_parts); break;
             case 'q': return 0;
             default: printf("Illegal code\n");
         }
@@ -85,7 +62,7 @@ int main(void)
  * array. Returns the array index if the part number is
  * found; otherwise, returns -1.
 */
-int find_part(int number)
+int find_part(int number, const struct part inventory[], int num_parts)
 {
     int i;
     
@@ -102,11 +79,11 @@ int find_part(int number)
  * an error message and returns prematurely if the part 
  * already exists or the database is full.
 */
-void insert(void)
+void insert(struct part inventory[], int *num_parts)
 {
     int part_number;
 
-    if (num_parts == MAX_PARTS)
+    if (*num_parts == MAX_PARTS)
     {
         printf("Database is full; can't add more parts.\n");
         return;
@@ -115,18 +92,18 @@ void insert(void)
     printf("Enter part number: ");
     scanf("%d", &part_number);
 
-    if (find_part(part_number) >= 0)
+    if (find_part(part_number, inventory, *num_parts) >= 0)
     {
         printf("Part already exists.\n");
         return;
     }
 
-    inventory[num_parts].number = part_number;
+    inventory[*num_parts].number = part_number;
     printf("Enter part name: ");
-    read_line(inventory[num_parts].name, NAME_LEN);
+    read_line(inventory[*num_parts].name, NAME_LEN);
     printf("Enter quantity on hand: ");
-    scanf("%d", &inventory[num_parts].on_hand);
-    num_parts++;
+    scanf("%d", &inventory[*num_parts].on_hand);
+    (*num_parts)++;
 }
 
 /**
@@ -135,13 +112,13 @@ void insert(void)
  * prints the name and quantity on hand; if not, prints
  * an error message.
 */
-void search(void)
+void search(const struct part inventory[], int num_parts)
 {
     int i, number;
 
     printf("Enter part number: ");
     scanf("%d", &number);
-    i = find_part(number);
+    i = find_part(number, inventory, num_parts);
 
     if (i >= 0)
     {
@@ -160,13 +137,13 @@ void search(void)
  * otherwise, prompts the user to enter change in quantity
  * on hand and updates the database.
 */
-void update(void)
+void update(struct part inventory[], int num_parts)
 {
     int i, number, change;
     
     printf("Enter part number: ");
     scanf("%d", &number);
-    i = find_part(number);
+    i = find_part(number, inventory, num_parts);
 
     if (i >= 0)
     {
@@ -186,7 +163,7 @@ void update(void)
  * Parts are printed in the order in which they were entered
  * into the database.
 */
-void print(void)
+void print(struct part inventory[], int num_parts)
 {
     int i;
 
@@ -202,3 +179,25 @@ void print(void)
     
 }
 
+// Bubble sort the inventory
+void sort_inventory (struct part inventory[], int num_parts)
+{
+    int i, j;
+
+    for (i = 0; i < num_parts - 1; i++)
+    {
+        for (j = 0; j < num_parts - i - 1; j++)
+        {
+            if (inventory[j].number > inventory[j + 1].number)
+            {
+
+                struct part temp = inventory[j];
+                inventory[j] = inventory[j + 1];
+                inventory[j + 1] = temp;
+
+            }
+
+        }
+    }
+
+}
